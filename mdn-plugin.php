@@ -3,7 +3,7 @@
  * Plugin Name:       Malaysia Diaspora Network
  * Plugin URI:        https://github.com/ElShaddai-Centre-Berhard/mdn-plugin
  * Description:       A plugin built with the idea of making a simple management tool for Malaysia Diaspora Network Directory
- * Version:           1.0.1
+ * Version:           1.0.1.1
  * Author:            James Wobil
  * Requires at least: 6.4
  * Author URI:        https://github.com/wobiljames
@@ -25,3 +25,7 @@ $mdn_update_checker = PucFactory::buildUpdateChecker(
 
 $mdn_update_checker->setBranch( 'main' );
 $mdn_update_checker->getVcsApi()->enableReleaseAssets();
+
+if ( defined( 'MDN_GITHUB_TOKEN' ) && MDN_GITHUB_TOKEN ) {
+	$mdn_update_checker->setAuthentication( MDN_GITHUB_TOKEN );
+}
