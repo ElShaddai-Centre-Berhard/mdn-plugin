@@ -17,7 +17,7 @@ class MDN_Admin {
 			'mdn-portal',
 			[ $this, 'render_dashboard' ],
 			'dashicons-groups',
-			30
+			3
 		);
 
 		add_submenu_page(
