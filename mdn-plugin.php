@@ -13,6 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+define( 'MDN_VERSION', '1.0.2' );
+define( 'MDN_PLUGIN_FILE', __FILE__ );
+define( 'MDN_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'MDN_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
 require __DIR__ . '/plugin-update-checker/plugin-update-checker.php';
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
@@ -28,4 +33,9 @@ $mdn_update_checker->getVcsApi()->enableReleaseAssets();
 
 if ( defined( 'MDN_GITHUB_TOKEN' ) && MDN_GITHUB_TOKEN ) {
 	$mdn_update_checker->setAuthentication( MDN_GITHUB_TOKEN );
+}
+
+if ( is_admin() ) {
+	require_once MDN_PLUGIN_DIR . 'includes/admin/class-mdn-admin.php';
+	new MDN_Admin();
 }
