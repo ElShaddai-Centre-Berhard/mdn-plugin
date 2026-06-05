@@ -11,6 +11,16 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'MDN_VERSION', '1.0.0' );
+
+// Update checker — pulls releases from GitHub
+require_once plugin_dir_path( __FILE__ ) . 'plugin-update-checker/load-v5p6.php';
+$mdn_update_checker = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+    'https://github.com/ElShaddai-Centre-Berhard/mdn-plugin',
+    __FILE__,
+    'mdn-plugin'
+);
+$mdn_update_checker->setBranch( 'dev' );
+$mdn_update_checker->getVcsApi()->enableReleaseAssets();
 define( 'MDN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MDN_URL',  plugin_dir_url( __FILE__ ) );
 
