@@ -23,16 +23,20 @@ $mdn_update_checker->setBranch( 'main' );
 define( 'MDN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MDN_URL',  plugin_dir_url( __FILE__ ) );
 
+// --- Load modules from their folders ---
 require_once MDN_PATH . 'includes/admin/admin.php';
-MDN_Admin::init();
 require_once MDN_PATH . 'includes/directory/directory.php';
-MDN_Directory::init();
 require_once MDN_PATH . 'includes/member-management/member-management.php';
 require_once MDN_PATH . 'includes/member-portal/member-portal.php';
 require_once MDN_PATH . 'includes/blog/blog.php';
 require_once MDN_PATH . 'includes/library/library.php';
 require_once MDN_PATH . 'includes/resources/resources.php';
 
+// --- Initialise modules, based on their PHP class names ---
+MDN_Admin::init();
+MDN_Directory::init();
+
+// --- Plugin Activation, a ---
 register_activation_hook( __FILE__, 'mdn_activate' );
 function mdn_activate() {
     require_once MDN_PATH . 'includes/directory/class-mdn-partner-post-type.php';
