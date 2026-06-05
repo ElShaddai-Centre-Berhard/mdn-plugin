@@ -10,7 +10,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'MDN_VERSION', '1.0.0' );
+define( 'MDN_VERSION', '1.1' );
 
 // Update checker — pulls releases from GitHub
 require_once plugin_dir_path( __FILE__ ) . 'plugin-update-checker/load-v5p6.php';
