@@ -50,6 +50,19 @@ class MDN_Partner_Post_Type {
             ),
             'rewrite' => array( 'slug' => 'partner-category' ),
         ) );
+
+        register_taxonomy( 'partner_region', 'partner', array(
+            'hierarchical' => false,
+            'show_in_rest' => true,
+            'labels'       => array(
+                'name'          => 'Regions',
+                'singular_name' => 'Region',
+                'add_new_item'  => 'Add New Region',
+                'edit_item'     => 'Edit Region',
+                'search_items'  => 'Search Regions',
+            ),
+            'rewrite' => array( 'slug' => 'partner-region' ),
+        ) );
     }
 
     // ── Field definitions ─────────────────────────────────────────────────────

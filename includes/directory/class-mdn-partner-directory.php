@@ -16,6 +16,7 @@ class MDN_Partner_Directory {
 
         $search   = sanitize_text_field( $_GET['mdn_search'] ?? '' );
         $category = intval( $_GET['mdn_cat'] ?? 0 );
+        $region   = intval( $_GET['mdn_region'] ?? 0 );
 
         $args = array(
             'post_type'      => 'partner',
@@ -24,16 +25,29 @@ class MDN_Partner_Directory {
             's'              => $search,
         );
 
+        $tax_query = array();
         if ( $category ) {
-            $args['tax_query'] = array( array(
+            $tax_query[] = array(
                 'taxonomy' => 'partner_category',
                 'field'    => 'term_id',
                 'terms'    => $category,
-            ) );
+            );
+        }
+        if ( $region ) {
+            $tax_query[] = array(
+                'taxonomy' => 'partner_region',
+                'field'    => 'term_id',
+                'terms'    => $region,
+            );
+        }
+        if ( ! empty( $tax_query ) ) {
+            $tax_query['relation'] = 'AND';
+            $args['tax_query']     = $tax_query;
         }
 
         $query      = new WP_Query( $args );
         $categories = get_terms( array( 'taxonomy' => 'partner_category', 'hide_empty' => true ) );
+        $regions    = get_terms( array( 'taxonomy' => 'partner_region',   'hide_empty' => true ) );
         $total      = $query->found_posts;
         ?>
 
@@ -58,14 +72,25 @@ class MDN_Partner_Directory {
                     <?php endforeach; ?>
                 </select>
                 <?php endif; ?>
+                <?php if ( ! empty( $regions ) && ! is_wp_error( $regions ) ) : ?>
+                <select name="mdn_region" aria-label="Filter by region">
+                    <option value="">All regions</option>
+                    <?php foreach ( $regions as $reg ) : ?>
+                        <option value="<?php echo esc_attr( $reg->term_id ); ?>"
+                            <?php selected( $region, $reg->term_id ); ?>>
+                            <?php echo esc_html( $reg->name ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <?php endif; ?>
                 <button type="submit" class="mdn-btn">Search</button>
-                <?php if ( $search || $category ) : ?>
+                <?php if ( $search || $category || $region ) : ?>
                     <a href="?" class="mdn-clear-link">Clear filters</a>
                 <?php endif; ?>
             </form>
 
             <p class="mdn-result-count">
-                <?php if ( $search || $category ) : ?>
+                <?php if ( $search || $category || $region ) : ?>
                     <?php echo esc_html( $total ); ?> result<?php echo $total !== 1 ? 's' : ''; ?> found
                 <?php else : ?>
                     <?php echo esc_html( $total ); ?> partner<?php echo $total !== 1 ? 's' : ''; ?> listed
@@ -84,6 +109,12 @@ class MDN_Partner_Directory {
                     $full_excerpt = get_the_excerpt();
                     $short        = wp_trim_words( $full_excerpt, 20, null );
                     $needs_more   = ( str_word_count( $full_excerpt ) > 20 );
+
+                    // Initials for placeholder
+                    $words    = explode( ' ', get_the_title() );
+                    $initials = implode( '', array_map( function( $w ) {
+                        return strtoupper( mb_substr( $w, 0, 1 ) );
+                    }, array_slice( $words, 0, 3 ) ) );
                 ?>
                 <article class="mdn-card">
 
@@ -93,18 +124,8 @@ class MDN_Partner_Directory {
                                 <?php the_post_thumbnail( 'medium', array( 'alt' => get_the_title() ) ); ?>
                             </div>
                         <?php else : ?>
-                            <div class="mdn-card-img mdn-card-img--placeholder">
-                                <?php
-                                $logo_id = get_theme_mod( 'custom_logo' );
-                                if ( $logo_id ) {
-                                    echo wp_get_attachment_image( $logo_id, 'thumbnail', false, array( 'alt' => get_bloginfo( 'name' ) ) );
-                                } else { ?>
-                                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="1.2" aria-hidden="true">
-                                        <circle cx="12" cy="8" r="4"/>
-                                        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-                                    </svg>
-                                <?php } ?>
+                            <div class="mdn-card-img mdn-card-img--initials">
+                                <?php echo esc_html( $initials ); ?>
                             </div>
                         <?php endif; ?>
                     </a>
@@ -155,7 +176,7 @@ class MDN_Partner_Directory {
             <?php else : ?>
             <div class="mdn-empty">
                 <p>No partners found<?php echo $search ? ' for "' . esc_html( $search ) . '"' : ''; ?>.</p>
-                <?php if ( $search || $category ) : ?>
+                <?php if ( $search || $category || $region ) : ?>
                     <a href="?" class="mdn-btn mdn-btn-outline">Clear filters</a>
                 <?php endif; ?>
             </div>
