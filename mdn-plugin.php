@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Malaysia Diaspora Network
  * Description: Gutenberg-native member portal and partner directory for MDN.
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      ElShaddai Centre Berhad
  * Plugin URI:  https://github.com/ElShaddai-Centre-Berhad/mdn-plugin
  * License:     GPL2
@@ -10,7 +10,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'MDN_VERSION', '1.1' );
+define( 'MDN_VERSION', '1.1.0' );
 
 // Update checker — pulls releases from GitHub
 require_once plugin_dir_path( __FILE__ ) . 'plugin-update-checker/load-v5p6.php';
