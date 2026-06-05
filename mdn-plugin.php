@@ -20,12 +20,13 @@ $mdn_update_checker = YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdate
     'mdn-plugin'
 );
 $mdn_update_checker->setBranch( 'dev' );
-$mdn_update_checker->getVcsApi()->enableReleaseAssets();
 define( 'MDN_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MDN_URL',  plugin_dir_url( __FILE__ ) );
 
 require_once MDN_PATH . 'includes/admin/admin.php';
+MDN_Admin::init();
 require_once MDN_PATH . 'includes/directory/directory.php';
+MDN_Directory::init();
 require_once MDN_PATH . 'includes/member-management/member-management.php';
 require_once MDN_PATH . 'includes/member-portal/member-portal.php';
 require_once MDN_PATH . 'includes/blog/blog.php';
