@@ -67,7 +67,7 @@ Built for the block editor — every feature ships as configurable blocks you ca
 
 ## Requirements
 
-- WordPress 6.X+ (Gutenberg / block editor)
+- WordPress 7.X+ (Gutenberg / block editor)
 - PHP X.X+
 
 ## Roadmap
